@@ -2,14 +2,15 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import ThemeSelectAppbar from "./ThemeSelectUpdated";
-import { ListIcon, XIcon } from "@phosphor-icons/react";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
+import Settings from "./Settings";
+import { GearIcon, ListIcon, XIcon } from "@phosphor-icons/react";
 
 const Appbar = () => {
   const [isHidden, setIsHidden] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isCursorNearTop, setIsCursorNearTop] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [showPj, setShowPj] = useState(false);
 
@@ -25,8 +26,6 @@ const Appbar = () => {
       }
       setScrollPosition(currentScrollPos);
       lastScrollTop = currentScrollPos;
-
-      if (isDropdownOpen) setIsDropdownOpen(false);
     };
 
     const handleMouseMove = (event) => {
@@ -52,7 +51,7 @@ const Appbar = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isCursorNearTop, isDropdownOpen]);
+  }, [isCursorNearTop]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -70,10 +69,10 @@ const Appbar = () => {
 
   return (
     <nav
-      className={`master-font tracking-wide w-full py-4 px-3 sticky z-50 transition-all duration-500 dark:border-b-2 dark:border-gray-900 ${backgroundColor} ${isHidden && !isCursorNearTop ? "-top-30" : "top-0"
+      className={`primary-font w-full py-4 px-3 sticky z-50 transition-all duration-500 dark:border-b-2 dark:border-gray-900 ${backgroundColor} ${isHidden && !isCursorNearTop ? "-top-30" : "top-0"
         }`}
     >
-      <div className={`w-full sm:w-10/12 md:w-4/5 mx-auto flex justify-between items-center ${textColor}`}>
+      <div className={`layout-container flex justify-between items-center ${textColor} text-base sm:text-lg`}>
         {/* <Link href={"/"} className="flex items-center gap-2 text-2xl md:text-3xl xl:text-4xl font-medium tracking-normal">
           <Image src="/favicon.svg" alt="Logo" className="w-12 h-12  md:w-24 md:h-24" width={1} height={1} />
           Purushotam Jeswani
@@ -95,7 +94,7 @@ const Appbar = () => {
           </div>
         </Link>
 
-        <div className="hidden md:flex w-2/5 text-base  md:text-lg 2xl:text-xl flex-row gap-3 justify-between items-center tracking-tight">
+        <div className="hidden md:flex w-1/2 xl:w-2/5 text-base md:text-lg lg:text-xl 2xl:text-2xl flex-row gap-3 justify-between items-center">
           {["About", "Skills", "Projects"].map((item) => (
             <Link
               key={item}
@@ -116,11 +115,28 @@ const Appbar = () => {
               <span className="absolute left-0 bottom-[-3px] w-0 h-[2px] bg-current transition-all duration-300 group-hover:w-full group-hover:bottom-[-5px]"></span>
             </Link>
           ))}
-          <ThemeSelectAppbar />
-        </div>
+          <div className="flex items-center justify-center">
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="relative flex items-center justify-center w-10 h-10 rounded-full text-xl transition-colors duration-300 focus:outline-none hover:bg-gray-200/60 dark:hover:bg-gray-700"
+              aria-label="Open settings"
+            >
+              <GearIcon size={22} className={`text-black dark:text-white`} />
+            </button>
+          </div>
 
-        <div className="md:hidden flex items-center relative gap-3">
-          <ThemeSelectAppbar />
+        </div>
+        <div className="md:hidden flex items-center gap-3">
+          <div className="flex items-center justify-center">
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="relative flex items-center justify-center w-12 h-12 rounded-full text-2xl transition-colors duration-300 focus:outline-none hover:bg-gray-200/60 dark:hover:bg-gray-700"
+              aria-label="Open settings"
+            >
+              <GearIcon size={20} className={`text-black dark:text-white transition-all duration-300 rotate-90 scale-110`} />
+            </button>
+          </div>
+
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-label="Toggle Menu"
@@ -128,43 +144,44 @@ const Appbar = () => {
             {isDropdownOpen ? (
               <XIcon size={22} />
             ) : (
-              <ListIcon  size={22} />
+              <ListIcon size={22} />
             )}
           </button>
-          {isDropdownOpen && (
-            <div
-              ref={dropdownRef}
-              className={`absolute top-[100%] right-0 text-xl md:hidden ${backgroundColor} rounded-md shadow-md ${textColor} shadow-lg w-48`}
-            >
-              <div className="flex flex-col gap-3 p-3">
-                {["About", "Skills", "Projects"].map((item) => (
-                  <Link
-                    key={item}
-                    href={`/#${item.toLowerCase()}`}
-                    className={`relative hover:text-opacity-80 group`}
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    {item}
-                    <span className="absolute left-0 bottom-[-3px] w-0 h-[2px] bg-current transition-all duration-300 group-hover:w-8/12 group-hover:bottom-[-5px]"></span>
-                  </Link>
-                ))}
-
-                {["Resume", "Contact"].map((item) => (
-                  <Link
-                    key={item}
-                    href={`/${item.toLowerCase()}`}
-                    className={`relative hover:text-opacity-80 group`}
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    {item}
-                    <span className="absolute left-0 bottom-[-3px] w-0 h-[2px] bg-current transition-all duration-300 group-hover:w-8/12 group-hover:bottom-[-5px]"></span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
+      {isDropdownOpen && (
+        <div
+          ref={dropdownRef}
+          className={`md:hidden bg-white/15 dark:bg-grey-900/95 ${textColor} border-t border-black/10 dark:border-white/10 rounded-md`}
+        >
+          <div className="w-full sm:w-10/12 md:w-4/5 mx-auto flex flex-col gap-2 py-3 text-xl">
+            {["About", "Skills", "Projects"].map((item) => (
+              <Link
+                key={item}
+                href={`/#${item.toLowerCase()}`}
+                className="py-2 border-b border-white/10 last:border-0 flex items-center gap-2 transition-colors duration-200 hover:text-gray-900 dark:hover:text-cyan-100"
+                onClick={() => setIsDropdownOpen(false)}
+              >
+                <span className="text-base opacity-70 mt-1">➜</span>
+                <span>{item}</span>
+              </Link>
+            ))}
+
+            {["Resume", "Contact"].map((item) => (
+              <Link
+                key={item}
+                href={`/${item.toLowerCase()}`}
+                className="py-2 border-b border-white/10 last:border-0 flex items-center gap-2 transition-colors duration-200 hover:text-gray-900 dark:hover:text-cyan-100"
+                onClick={() => setIsDropdownOpen(false)}
+              >
+                <span className="text-base opacity-70">➜</span>
+                <span>{item}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+      <Settings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </nav>
   );
 };

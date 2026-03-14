@@ -36,7 +36,7 @@ const SocialIcons = () => {
                         target='_blank'
                         href={social.href}
                         aria-label={social.name}
-                        className={`relative flex justify-center items-center w-12 h-12 rounded-full bg-white text-gray-600 transition-all ease-in-out duration-300 hover:shadow-lg hover:text-white overflow-hidden`}
+                        className={`relative flex justify-center items-center w-12 h-12 rounded-full bg-white text-gray-600 transition-all ease-in-out duration-300 hover:scale-110 hover:shadow-[0_4px_14px_0_rgba(255,255,255,0.39)] dark:hover:shadow-[0_4px_14px_0_rgba(255,255,255,0.1)] hover:text-white overflow-hidden`}
                     >
                         <div className={`absolute inset-0 ${social.bgColor} transition-all ease-in-out duration-300 opacity-0 group-hover:opacity-100`}></div>
                         <svg

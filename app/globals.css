@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer components {
+  .layout-container {
+    @apply w-[92%] sm:w-[95%] max-w-[720px] xl:max-w-[940px] mx-auto;
+  }
+
   .links {
     @apply underline relative;
     text-decoration-color: transparent;
@@ -20,12 +24,12 @@
   }
 
   /* PT Sans */
-  .title-font{
+  .title-font {
     font-family: var(--font-allison), cursive;
   }
 
   .master-font {
-    font-family: var(--font-league-spartan), 'Times New Roman', sans-serif;
+    font-family: var(--font-league-spartan), 'Times New Roman';
   }
 
   .primary-font {

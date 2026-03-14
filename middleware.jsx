@@ -27,7 +27,7 @@ export function middleware(req) {
         if (isPrivateApi) {
             console.log('Blocking access to private API:', url.pathname);
             return NextResponse.json(
-                { message: 'Unauthorized access. Session expired or invalid.', success: false },
+                { message: 'Unauthorized access. Session expiṭred or invalid.', success: false },
                 { status: 401 }
             );
         }

@@ -3,6 +3,7 @@ import "./globals.css";
 import Provider from "@/utils/Provider";
 import Appbar from "@/components/Appbar";
 import Footer from "@/components/Footer";
+import OnekoCat from "@/components/common/OnekoCat";
 
 const inter = Inter({ subsets: ["latin"], display: 'swap', variable: '--font-inter' });
 
@@ -15,7 +16,7 @@ const allison = Allison({
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
   display: 'swap',
   variable: '--font-league-spartan'
 
@@ -95,7 +96,7 @@ export default async function RootLayout({ children }) {
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <link rel="shortcut icon" href="/favicon.ico" />
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-          <meta name="apple-mobile-web-app-title" content="PJ Portolio" />
+          <meta name="apple-mobile-web-app-title" content="Purushotam Portolio" />
           <link rel="manifest" href="/site.webmanifest" />
 
           <meta property="og:title" content={metadata.openGraph.title} />
@@ -120,7 +121,7 @@ export default async function RootLayout({ children }) {
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
           </noscript>
 
-          <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+          <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com " />
           <link rel="dns-prefetch" href="https://unpkg.com" />
           <script defer src="https://cloud.umami.is/script.js" data-website-id="ec3938ba-2480-4751-ba61-cf71aee6d9e8"></script>
         </head>
@@ -128,6 +129,7 @@ export default async function RootLayout({ children }) {
           <div className="flex flex-col">
             <Appbar />
             <div className="flex-1">
+              <OnekoCat />
               {children}
             </div>
             <Footer resumeDocId={resumeDocId} />
