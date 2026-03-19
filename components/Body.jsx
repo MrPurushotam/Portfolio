@@ -5,6 +5,7 @@ import Socials from "./Socials";
 import { useEffect, useMemo, useRef, useState } from "react";
 import BriefProject from "./BriefProject";
 import Badge from "./Badge";
+import GitHubHeatmap from "./GitHubHeatmap";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { FileArrowDownIcon, StudentIcon } from "@phosphor-icons/react";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
@@ -338,6 +339,8 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                         </div>
                     </div>
                 </motion.div>
+
+                <GitHubHeatmap />
             </section>
 
 
