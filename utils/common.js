@@ -9,8 +9,8 @@ export async function readData() {
                 'Api-key': ApiKey,
             },
             next: {
-                revalidate: 8 * 3600,
-                tags: ['projects', 'skills', 'profile', 'resume']
+                revalidate: 24 * 3600,
+                tags: ['projects', 'skills', 'profile', 'resume', 'githubHeatmapTheme']
             }
         });
 
@@ -25,6 +25,7 @@ export async function readData() {
             skills: data.skills || [],
             resumeDocId: data.resumeDocId || "",
             profile: data.profile || "",
+            githubHeatmapTheme: data.githubHeatmapTheme || "ocean",
         };
     } catch (error) {
         console.error('Error reading data:', error.message);

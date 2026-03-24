@@ -26,7 +26,6 @@ function computeStats(weeks) {
         }
     });
 
-    // Current streak: walk backwards from today
     for (let i = allDays.length - 1; i >= 0; i--) {
         if (allDays[i].contributionCount > 0) {
             currentStreak++;
@@ -54,17 +53,15 @@ function getMonthPositions(weeks) {
     return positions;
 }
 
-export default function GitHubHeatmap() {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
+export default function GitHubHeatmap({ defaultTheme = "ocean", initialData = null }) {
+    const [data, setData] = useState(initialData);
+    const [loading, setLoading] = useState(!initialData);
     const [error, setError] = useState(null);
-    const [theme, setTheme] = useState("ocean");
+    const theme = defaultTheme;
     const [tooltip, setTooltip] = useState(null);
     const [isDark, setIsDark] = useState(false);
-    const [themePickerOpen, setThemePickerOpen] = useState(false);
     const containerRef = useRef(null);
     const tooltipRef = useRef(null);
-    const themePickerRef = useRef(null);
 
     useEffect(() => {
         const checkDark = () => {
@@ -76,17 +73,10 @@ export default function GitHubHeatmap() {
         return () => observer.disconnect();
     }, []);
 
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (themePickerRef.current && !themePickerRef.current.contains(e.target)) {
-                setThemePickerOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+
 
     useEffect(() => {
+        if (initialData) return;
         const fetchData = async () => {
             try {
                 const res = await fetch("/api/github");
@@ -159,7 +149,7 @@ export default function GitHubHeatmap() {
     const step = cellSize + cellGap;
     const labelOffset = 32;
     const svgWidth = labelOffset + data.weeks.length * step + 4;
-    const svgHeight = 7 * step + 24; // extra for month labels
+    const svgHeight = 7 * step + 24;
 
     return (
         <motion.div
@@ -169,73 +159,15 @@ export default function GitHubHeatmap() {
             viewport={{ once: true }}
             className="flex flex-col gap-4 p-6 md:p-8 w-full layout-container bg-gray-300/30 dark:bg-[#10151b]/50 ring-1 ring-gray-200 dark:ring-0 dark:border dark:border-[#ffffff1a] rounded-2xl shadow-lg backdrop-blur-sm mt-8"
         >
-            {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <h2 className="flex items-center gap-3 text-[#f59e0b] dark:text-[#fff4b7] text-2xl md:text-3xl capitalize font-[730] tracking-wide master-font hover:text-[#fbbf24] dark:hover:text-[#ffd686] transition-colors duration-300">
                     <GithubLogoIcon size="1em" weight="fill" />
                     GitHub Activity
                 </h2>
-
-                {/* Theme Selector */}
-                <div className="relative" ref={themePickerRef}>
-                    <button
-                        onClick={() => setThemePickerOpen(!themePickerOpen)}
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-full bg-gray-200/70 dark:bg-[#1e293b] text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-[#334155] transition-all duration-200 ring-1 ring-gray-300/50 dark:ring-gray-600/30"
-                    >
-                        <span>{COLOR_THEMES[theme].label}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className={`w-3.5 h-3.5 transition-transform duration-200 ${themePickerOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <AnimatePresence>
-                        {themePickerOpen && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                                transition={{ duration: 0.15 }}
-                                className="absolute right-0 top-full mt-2 z-50 bg-white dark:bg-[#1e293b] rounded-xl shadow-xl ring-1 ring-gray-200 dark:ring-gray-700/50 overflow-hidden min-w-[160px]"
-                            >
-                                {Object.entries(COLOR_THEMES).map(([key, val]) => (
-                                    <button
-                                        key={key}
-                                        onClick={() => { setTheme(key); setThemePickerOpen(false); }}
-                                        className={`w-full flex items-center gap-2 px-4 py-2.5 text-sm transition-all duration-150 ${theme === key
-                                            ? "bg-gray-100 dark:bg-[#334155] text-gray-900 dark:text-white font-medium"
-                                            : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#293548]"
-                                            }`}
-                                    >
-                                        <span>{val.label}</span>
-                                        {theme === key && (
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 ml-auto text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        )}
-                                    </button>
-                                ))}
-                                {/* Preview strip */}
-                                <div className="px-4 py-2.5 border-t border-gray-100 dark:border-gray-700/50">
-                                    <div className="flex items-center gap-1 justify-center">
-                                        <span className="text-[10px] text-gray-400 mr-1">Less</span>
-                                        {["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"].map((level) => (
-                                            <div
-                                                key={level}
-                                                className="w-3 h-3 rounded-sm"
-                                                style={{ backgroundColor: getThemeColor(level, theme, isDark) }}
-                                            />
-                                        ))}
-                                        <span className="text-[10px] text-gray-400 ml-1">More</span>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
             </div>
 
             <div className="w-12 h-[2px] bg-gray-400 dark:bg-gray-500 mx-auto rounded-full mb-2" />
 
-            {/* Stats */}
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm">
                 <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getThemeColor("FOURTH_QUARTILE", theme, isDark) }} />
@@ -260,7 +192,6 @@ export default function GitHubHeatmap() {
             {/* Heatmap Grid */}
             <div ref={containerRef} className="relative overflow-x-auto pb-2 -mx-2 px-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <svg width={svgWidth} height={svgHeight} className="block" role="img" aria-label="GitHub contribution heatmap">
-                    {/* Month labels */}
                     {monthPositions.map(({ month, weekIndex }) => (
                         <text
                             key={`month-${weekIndex}`}
@@ -274,7 +205,6 @@ export default function GitHubHeatmap() {
                         </text>
                     ))}
 
-                    {/* Day labels */}
                     {DAY_LABELS.map((label, i) =>
                         label ? (
                             <text
@@ -290,7 +220,6 @@ export default function GitHubHeatmap() {
                         ) : null
                     )}
 
-                    {/* Contribution cells */}
                     {data.weeks.map((week, wi) =>
                         week.contributionDays.map((day, di) => (
                             <motion.rect
@@ -321,7 +250,6 @@ export default function GitHubHeatmap() {
                     )}
                 </svg>
 
-                {/* Tooltip */}
                 <AnimatePresence>
                     {tooltip && (
                         <motion.div
@@ -347,7 +275,6 @@ export default function GitHubHeatmap() {
                 </AnimatePresence>
             </div>
 
-            {/* Legend */}
             <div className="flex items-center justify-between flex-wrap gap-2">
                 <a
                     href={`https://github.com/${data?.username || ""}`}

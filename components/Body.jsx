@@ -11,7 +11,7 @@ import { FileArrowDownIcon, StudentIcon } from "@phosphor-icons/react";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
-export function Body({ projects, skills, profile, resumeDocId }) {
+export function Body({ projects, skills, profile, resumeDocId, githubHeatmapTheme, githubHeatmapData }) {
     const [isProjectBriefObject, setIsProjectBriefObject] = useState(false);
     const langCount = useRef({});
     const [uniqueLanguages, setUniqueLanguges] = useState([]);
@@ -270,9 +270,7 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                 </div>
             </section>
 
-            {/* About Section */}
             <section id="about" className="w-full min-h-[85vh] h-fit mx-auto flex flex-col justify-center items-center p-8 dark:bg-[#10151b]">
-                {/* About Me Details */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -296,7 +294,6 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                     </p>
                 </motion.div>
 
-                {/* Education Details */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -311,10 +308,8 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                     <div className="w-12 h-[2px] bg-gray-400 dark:bg-gray-500 mx-auto rounded-full mb-4"></div>
 
                     <div className="flex flex-col gap-2 relative pl-2 md:pl-10">
-                        {/* Vertical Timeline Line */}
                         <div className="absolute left-[17px] md:left-[49px] top-6 bottom-4 w-0.5 bg-gradient-to-b from-gray-400/40 to-gray-400/10 dark:from-[#ffd686]/40 dark:to-transparent"></div>
 
-                        {/* Timeline Item 1 */}
                         <div className="relative flex items-start gap-5 group">
                             <div className="flex flex-col items-center pt-1.5 relative z-10 w-fit">
                                 <div className="w-5 h-5 rounded-full border-4 border-red-500 dark:border-[#10151b] bg-white dark:bg-[#ffd686] flex-shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.2)] dark:shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
@@ -326,7 +321,6 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                             </div>
                         </div>
 
-                        {/* Timeline Item 2 */}
                         <div className="relative flex items-start gap-5 group">
                             <div className="flex flex-col items-center pt-1.5 relative z-10 w-fit">
                                 <div className="w-5 h-5 rounded-full border-4 border-red-500 dark:border-[#10151b] bg-white dark:bg-[#ffd686] flex-shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.2)] dark:shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
@@ -340,10 +334,8 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                     </div>
                 </motion.div>
 
-                <GitHubHeatmap />
+                <GitHubHeatmap defaultTheme={githubHeatmapTheme} initialData={githubHeatmapData} />
             </section>
-
-
 
             <section id="skills" className="w-full mx-auto flex flex-col justify-center pt-8 pb-7">
 
@@ -355,7 +347,7 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor"
-                            className="w-9 h-9 md:w-12 md:h-12 text-gray-900 mb-1">
+                            className="w-9 h-9 md:w-12 md:h-12 text-gray-900 dark:text-gray-200/70 mb-1">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                                 d="M8 9l3 3-3 3m5 0h3" />
                         </svg>
@@ -365,7 +357,7 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                 <div className="layout-container p-5 space-y-10">
                     {Object.keys(groupedSkills).map((type) => (
                         <div key={type} className="flex justify-center flex-col gap-2">
-                            <h2 className="text-xl md:text-2xl font-semibold border-l-4 border-gray-900 pl-3 mb-4 text-gray-900 dark:text-[#fcd34d] master-font capitalize">
+                            <h2 className="text-xl md:text-2xl font-semibold border-l-4 border-gray-900 dark:border-gray-200/80 pl-3 mb-4 text-gray-900 dark:text-[#fcd34d] master-font capitalize">
                                 {type}
                             </h2>
                             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
@@ -387,11 +379,9 @@ export function Body({ projects, skills, profile, resumeDocId }) {
                 </div>
             </section>
 
-            {/* Projects Section */}
             <section id="projects" className="py-10">
                 <div className="w-full space-y-6">
                     <div className="relative flex flex-col justify-center items-center layout-container ">
-                        {/* <div className=" w-2/3 mx-auto absolute top-0 left-0 right-0  h={[3px]} bg-black bg-gradient-to-r from-transparent via-black to-transparent"></div> */}
                         <motion.h1
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}

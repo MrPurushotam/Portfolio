@@ -15,23 +15,36 @@ export const metadata = {
 
 export const fetchStaticDataServerSide = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all`, {
-      next: {
-        revalidate: 8 * 3600,
-        tags: ['projects', 'skills', 'profile', 'resume']
-      }
-    }
-    );
+    const [res, githubRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all`, {
+        next: {
+          revalidate: 24 * 3600,
+          tags: ['projects', 'skills', 'profile', 'resume', 'githubHeatmapTheme']
+        }
+      }),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/github`, {
+        next: { revalidate: 24 * 3600, tags: ['githubHeatmapData'] }
+      }).catch(err => {
+        console.error('Error fetching GitHub data:', err);
+        return { ok: false };
+      })
+    ]);
     if (!res.ok) {
       throw new Error('Failed to fetch data');
     }
     const data = await res.json();
+    let githubHeatmapData = null;
+    if (githubRes.ok) {
+      githubHeatmapData = await githubRes.json();
+    }
     return {
       props: {
         projects: data.projects || [],
         skills: data.skills || [],
         profile: data.profile || {},
         resumeDocId: data.resumeDocId || '',
+        githubHeatmapTheme: data.githubHeatmapTheme || 'ocean',
+        githubHeatmapData,
       },
     };
   } catch (error) {
@@ -42,6 +55,8 @@ export const fetchStaticDataServerSide = async () => {
         skills: [],
         profile: {},
         resumeDocId: '',
+        githubHeatmapTheme: 'ocean',
+        githubHeatmapData: null,
       },
     };
   }
@@ -55,8 +70,8 @@ export const fetchStaticDataServerSide = async () => {
 
 export default async function Home() {
   const data = await fetchStaticDataServerSide();
-  const { projects, skills, profile, resumeDocId } = data.props;
+  const { projects, skills, profile, resumeDocId, githubHeatmapTheme, githubHeatmapData } = data.props;
   return (
-    <Body key={1212} projects={projects} skills={skills} profile={profile} resumeDocId={resumeDocId} />
+    <Body key={Date.now()} projects={projects} skills={skills} profile={profile} resumeDocId={resumeDocId} githubHeatmapTheme={githubHeatmapTheme} githubHeatmapData={githubHeatmapData} />
   );
 }

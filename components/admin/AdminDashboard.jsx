@@ -1,9 +1,10 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
-import UpdateProjects from "./UpdateProjects";
-import UpdateSkill from "./UpdateSkill";
+import UpdateProjects from ".././UpdateProjects";
+import UpdateSkill from ".././UpdateSkill";
+import { GithubHeatmapSelector } from "./GithubHeatmapSelector";
 import { useRouter } from "next/navigation";
-import useCurrentTime from "./currentTime";
+import useCurrentTime from ".././currentTime";
 import { ReactSortable } from "react-sortablejs";
 import { ArrowCounterClockwiseIcon, NotePencilIcon, PencilSimple, PencilSimpleIcon, TrashSimpleIcon } from "@phosphor-icons/react";
 const Admin = () => {
@@ -13,6 +14,7 @@ const Admin = () => {
     const [projects, setProjects] = useState([]);
     const [skills, setSkills] = useState([]);
     const [resumeDocId, setResumeDocId] = useState("");
+    const [githubTheme, setGithubTheme] = useState("");
     const [profile, setProfile] = useState([]);
     const profileUrlRef = useRef("");
     const initalData = useRef({});
@@ -42,6 +44,7 @@ const Admin = () => {
                         setSkills(data.skills);
                         setResumeDocId(data.resumeDocId);
                         setProfileUrl(data.profile);
+                        setGithubTheme(data.githubHeatmapTheme || "ocean");
                     }
                 }
             } catch (error) {
@@ -335,6 +338,8 @@ const Admin = () => {
 
                     </div>
                 </div>
+
+                <GithubHeatmapSelector currentTheme={githubTheme} revalidate={revalidate} />
             </div>
         </div>
     )
