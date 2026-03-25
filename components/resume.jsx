@@ -5,7 +5,7 @@ import ResumeSkeleton from "./ResumeSkelenton";
 const ResumeIntegration = ({ resumeDocId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState(resumeDocId || "");
-  const [theme, setTheme] = useState('light'); // Add state for theme
+  const [theme, setTheme] = useState('light');
   const resumeLink = `https://drive.google.com/file/d/${id}/preview`;
 
   useEffect(() => {
@@ -28,7 +28,6 @@ const ResumeIntegration = ({ resumeDocId }) => {
   }, [resumeDocId]);
 
   useEffect(() => {
-    // Detect the current theme
     const currentTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
     setTheme(currentTheme);
   }, []);

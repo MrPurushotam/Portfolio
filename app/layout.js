@@ -4,6 +4,7 @@ import Provider from "@/utils/Provider";
 import Appbar from "@/components/Appbar";
 import Footer from "@/components/Footer";
 import OnekoCat from "@/components/common/OnekoCat";
+import { readData } from "@/utils/common";
 
 const inter = Inter({ subsets: ["latin"], display: 'swap', variable: '--font-inter' });
 
@@ -30,19 +31,13 @@ const markaziText = Markazi_Text({
 
 });
 
-export const fetchStaticDataServerSide = async () => {
+const fetchStaticDataServerSide = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all`, {
-      next: {
-        revalidate: 8 * 3600,
-        tags: ['projects', 'skills', 'profile', 'resume']
-      }
-    }
-    );
-    if (!res.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    const data = await res.json();
+    const data = await readData({
+      revalidate: 8 * 3600,
+      tags: ['projects', 'skills', 'profile', 'resume']
+    });
+
     return {
       props: {
         projects: data.projects || [],

@@ -1,6 +1,6 @@
 import { Body } from "@/components/Body";
-import { revalidatePath } from 'next/cache';
-
+import { readData } from "@/utils/common";
+import { fetchGitHubContributions } from "@/lib/githubContributions";
 
 export const metadata = {
   title: 'Home | Purushotam Jeswani',
@@ -13,30 +13,19 @@ export const metadata = {
   }
 };
 
-export const fetchStaticDataServerSide = async () => {
+const fetchStaticDataServerSide = async () => {
   try {
-    const [res, githubRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all`, {
-        next: {
-          revalidate: 24 * 3600,
-          tags: ['projects', 'skills', 'profile', 'resume', 'githubHeatmapTheme']
-        }
+    const [data, githubHeatmapData] = await Promise.all([
+      readData({
+        revalidate: 24 * 3600,
+        tags: ['projects', 'skills', 'profile', 'resume', 'githubHeatmapTheme']
       }),
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/github`, {
-        next: { revalidate: 24 * 3600, tags: ['githubHeatmapData'] }
-      }).catch(err => {
+      fetchGitHubContributions().catch(err => {
         console.error('Error fetching GitHub data:', err);
-        return { ok: false };
+        return null;
       })
     ]);
-    if (!res.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    const data = await res.json();
-    let githubHeatmapData = null;
-    if (githubRes.ok) {
-      githubHeatmapData = await githubRes.json();
-    }
+
     return {
       props: {
         projects: data.projects || [],

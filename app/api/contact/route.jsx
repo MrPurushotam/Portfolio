@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 const nodemailer = require('nodemailer');
 
-export const POST = async (req, res) => {
+export const POST = async (req) => {
     try {
         const { name, email, message, subject } = await req.json();
         if (!name || !email || !message || !subject) {

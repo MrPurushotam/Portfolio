@@ -1,14 +1,22 @@
 const ApiEndpoint = process.env.EXTENDED_APIENDPOINT;
 const ApiKey = process.env.EXTENDED_APIKEY;
 
-export async function readData() {
+const defaultData = {
+    projects: [],
+    skills: [],
+    resumeDocId: "",
+    profile: "",
+    githubHeatmapTheme: "ocean",
+};
+
+export async function readData(nextOptions) {
     try {
         const response = await fetch(`${ApiEndpoint}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Api-key': ApiKey,
             },
-            next: {
+            next: nextOptions || {
                 revalidate: 24 * 3600,
                 tags: ['projects', 'skills', 'profile', 'resume', 'githubHeatmapTheme']
             }
@@ -29,6 +37,7 @@ export async function readData() {
         };
     } catch (error) {
         console.error('Error reading data:', error.message);
+        return defaultData;
     }
 }
 
