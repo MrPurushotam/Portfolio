@@ -29,13 +29,7 @@ const fetchResumeDocIdServerSide = async () => {
 const page = async () => {
   const resumeData = await fetchResumeDocIdServerSide();
   return (
-    <div className="flex flex-col">
-      <Appbar />
-      <div className="flex-1">
-        <ResumeIntegration resumeDocId={resumeData} />
-      </div>
-      <Footer />
-    </div>
+    <ResumeIntegration resumeDocId={resumeData} />
   );
 }
 
