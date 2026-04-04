@@ -171,15 +171,20 @@ const Settings = ({ isOpen = false, onClose = () => { } }) => {
                                                     : "bg-transparent border border-transparent hover:bg-black/5 dark:hover:bg-white/5"
                                                     }`}
                                             >
-                                                <div
-                                                    className="w-10 h-10 rounded-md flex-shrink-0"
-                                                    style={{
-                                                        backgroundImage: `url(${char.spriteSheet})`,
-                                                        backgroundSize: 'cover',
-                                                        backgroundPosition: 'center',
-                                                        imageRendering: 'pixelated',
-                                                    }}
-                                                />
+                                                <div className="w-10 h-10 rounded-md flex-shrink-0 flex items-center justify-center overflow-hidden bg-black/5 dark:bg-white/5">
+                                                    <div
+                                                        style={{
+                                                            width: '32px',
+                                                            height: '32px',
+                                                            backgroundImage: `url(${char.spriteSheet})`,
+                                                            backgroundPosition: char.spriteCoordinate ? `-${char.spriteCoordinate[0] * 32}px -${char.spriteCoordinate[1] * 32}px` : '0px 0px',
+                                                            backgroundSize: char.spriteCoordinate ? '256px 128px' : 'contain',
+                                                            backgroundRepeat: 'no-repeat',
+                                                            imageRendering: 'pixelated',
+                                                            transform: 'scale(1.25)',
+                                                        }}
+                                                    />
+                                                </div>
                                                 <div className="text-left">
                                                     <span className="text-sm text-gray-700 dark:text-gray-300 block">{char.name}</span>
                                                     {char.audioFile && (
