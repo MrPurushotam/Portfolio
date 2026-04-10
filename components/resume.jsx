@@ -4,28 +4,8 @@ import ResumeSkeleton from "./ResumeSkelenton";
 
 const ResumeIntegration = ({ resumeDocId }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [id, setId] = useState(resumeDocId || "");
   const [theme, setTheme] = useState('light');
-  const resumeLink = `https://drive.google.com/file/d/${id}/preview`;
-
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        if (!resumeDocId) {
-          const resp = await fetch("/api/all/resume", { method: 'GET' });
-          if (resp.ok) {
-            const data = await resp.json();
-            if (data.success) {
-              setId(data.resumeDocId);
-            }
-          }
-        }
-      } catch (error) {
-        console.log("Error occured while fetching docId: ", error.message)
-      }
-    }
-    fetch();
-  }, [resumeDocId]);
+  const resumeLink = resumeDocId ? `/api/resume?docId=${encodeURIComponent(resumeDocId)}` : '/api/resume';
 
   useEffect(() => {
     const currentTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';

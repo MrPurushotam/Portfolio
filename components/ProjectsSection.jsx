@@ -28,17 +28,19 @@ const ProjectsSection = ({ project, state, index, isAutoOpen, isAutoMode, disabl
       className="group w-full border-b border-gray-200 dark:border-[#ffffff1a] py-5 first:border-t-0"
     >
       <div
-        className="flex justify-between items-center cursor-pointer select-none px-2 lg:px-4"
+        className="flex justify-between items-center cursor-pointer select-none px-2 lg:px-4 w-full min-w-0"
         onClick={toggleOpen}
       >
-        <div className="flex flex-col">
-          <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-[#ffd686] flex items-center gap-3">
-            {project?.title}
-            <svg xmlns="http://www.w3.org/2000/svg" className={`w-5 h-5 transition-transform duration-300 ${isOpen ? "rotate-180 text-blue-500" : "opacity-0 group-hover:opacity-100"} text-gray-400 dark:text-gray-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex flex-col min-w-0 w-full">
+          <div className="flex items-start justify-between w-full gap-3 min-w-0">
+            <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-[#ffd686] break-words flex-1 min-w-0">
+              {project?.title}
+            </h3>
+            <svg xmlns="http://www.w3.org/2000/svg" className={`w-5 h-5 flex-shrink-0 mt-1 md:mt-0 transition-transform duration-300 ${isOpen ? "rotate-180 text-blue-500" : "opacity-0 md:opacity-100 group-hover:opacity-100"} text-gray-400 dark:text-gray-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
             </svg>
-          </h3>
-          <p className="text-gray-500 dark:text-gray-400 text-sm md:text-base mt-1 truncate opacity-80">
+          </div>
+          <p className="text-gray-500 dark:text-gray-400 text-sm md:text-base mt-1 truncate opacity-80 w-full pl-0.5">
             {project?.techstack && JSON.parse(project.techstack).join(" • ")}
           </p>
         </div>

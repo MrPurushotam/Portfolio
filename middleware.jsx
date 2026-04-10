@@ -22,12 +22,13 @@ export function middleware(req) {
 
     if (url.pathname.startsWith('/api/') && !isValidToken) {
         const PrivateApis = ['/api/logout', '/api/profile', '/api/project', '/api/resume', '/api/revalidate', '/api/skill', '/api/updateOrder'];
-        const isPrivateApi = PrivateApis.some(path => url.pathname.startsWith(path));
+        const isPublicResumeRead = url.pathname === '/api/resume' && req.method === 'GET';
+        const isPrivateApi = !isPublicResumeRead && PrivateApis.some(path => url.pathname.startsWith(path));
 
         if (isPrivateApi) {
             console.log('Blocking access to private API:', url.pathname);
             return NextResponse.json(
-                { message: 'Unauthorized access. Session expiṭred or invalid.', success: false },
+                { message: 'Unauthorized access. Session expired or invalid.', success: false },
                 { status: 401 }
             );
         }
