@@ -4,6 +4,7 @@ import ContentLoader from 'react-content-loader'
 
 const ResumeSkeleton = props => {
   const isDarkMode = props.theme === 'dark';
+  const loaderKey = `resume-skeleton-${isDarkMode ? 'dark' : 'light'}`;
 
   return (
     <ContentLoader
@@ -14,6 +15,7 @@ const ResumeSkeleton = props => {
       foregroundColor={isDarkMode ? "#666666" : "#ffffff"}
       title="document"
       {...props}
+      uniqueKey={loaderKey}
     >
       <rect x="42" y="57" rx="4" ry="4" width="417" height="29" />
       <rect x="42" y="105" rx="4" ry="4" width="67" height="15" />

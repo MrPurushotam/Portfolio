@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer components {
+  .layout-container {
+    @apply w-[92%] sm:w-[95%] max-w-[720px] xl:max-w-[940px] mx-auto;
+  }
+
   .links {
     @apply underline relative;
     text-decoration-color: transparent;
@@ -20,12 +24,12 @@
   }
 
   /* PT Sans */
-  .title-font{
+  .title-font {
     font-family: var(--font-allison), cursive;
   }
 
   .master-font {
-    font-family: var(--font-league-spartan), 'Times New Roman', sans-serif;
+    font-family: var(--font-league-spartan), 'Times New Roman';
   }
 
   .primary-font {
@@ -162,6 +166,34 @@
       rgba(255, 20, 0, 0.2),
       rgba(255, 20, 0, 0.7) 95%,
       rgba(255, 20, 0, 0.1));
+}
+
+@keyframes discoColors {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes dudeFlip {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translateY(-100px) rotate(180deg) scale(1.5);
+  }
+
+  100% {
+    transform: translateY(0) rotate(360deg) scale(1);
+  }
+}
+
+.animate-dude-flip {
+  animation: dudeFlip 1s ease-in-out forwards;
 }
 
 .notion-dark .notion-page {

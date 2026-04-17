@@ -10,4 +10,9 @@ module.exports = {
     }
     return config
   },
+  turbopack: {
+    resolveModules: [
+      path.resolve(__dirname, 'node_modules')
+    ]
+  },
 }

@@ -1,18 +1,16 @@
 const SkillComponent = ({ tag, link }) => {
   return (
-    <div className="w-full h-auto p-2 sm:p-3 flex flex-col sm:flex-row items-center sm:justify-between rounded-lg bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-lg hover:shadow-xl hover:bg-white/30 dark:hover:bg-white/20 transition-all duration-300 overflow-hidden  ">
-      <div className="w-16 sm:w-20 lg:w-24 overflow-hidden flex-shrink-0">
-        <img 
-          src={link} 
-          alt={tag.split(" ").join("-")} 
-          className="aspect-[3/2] w-full object-contain hover:scale-105 transition-all duration-300 ease-in-out" 
+    <div className="group flex items-center gap-3 p-2 mx-auto w-full max-w-[200px] h-full rounded-xl bg-white dark:bg-[#1E293B] border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 cursor-default">
+      <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 dark:bg-white/80 rounded-lg group-hover:bg-white transition-colors duration-300 shadow-sm border border-black/5 dark:border-white/10">
+        <img
+          src={link}
+          alt={tag.replace(/\s+/g, '-')}
+          className="w-full h-full object-contain filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300"
         />
       </div>
-      <div className="mt-2 sm:mt-0 sm:ml-4 text-center sm:text-left">
-        <span className="text-gray-800 dark:text-gray-100 capitalize text-lg sm:text-xl lg:text-2xl tracking-tight font-medium truncate">
-          {tag}
-        </span>
-      </div>
+      <span className="text-gray-700 dark:text-gray-200 font-medium text-sm sm:text-base capitalize truncate pr-2">
+        {tag}
+      </span>
     </div>
   );
 };

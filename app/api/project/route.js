@@ -1,15 +1,9 @@
 import { NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
-import cloudinary from 'cloudinary';
 import { Readable } from 'stream';
 import { readData, writeData } from '../../../utils/common';
 import crypto from 'crypto';
-
-cloudinary.v2.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import cloudinary from '@/components/CloudinaryConfig';
 
 export async function POST(req) {
     try {
@@ -68,7 +62,7 @@ export async function POST(req) {
         revalidateTag('projects');
 
         const etag = crypto.createHash('md5').update(JSON.stringify(data)).digest('hex');
-        return NextResponse.json({ message: "Project added successfully.", success: true }, { status: 200 , headers: { 'ETag': etag }});
+        return NextResponse.json({ message: "Project added successfully.", success: true }, { status: 200, headers: { 'ETag': etag } });
     } catch (error) {
         console.log("Error occurred while adding project:", error.message);
         return NextResponse.json({ message: "Internal server error.", success: false }, { status: 500 });
@@ -136,7 +130,7 @@ export async function PUT(req) {
 
         data.projects[projectIndex] = updatedProject;
         await writeData(data);
-        
+
         // Revalidate the cache
         revalidateTag('projects');
 
@@ -186,7 +180,7 @@ export async function DELETE(req) {
         revalidateTag('projects');
 
         const etag = crypto.createHash('md5').update(JSON.stringify(data)).digest('hex');
-        return NextResponse.json({ message: "Project deleted successfully.", success: true }, { status: 200 , headers: { 'ETag': etag } });
+        return NextResponse.json({ message: "Project deleted successfully.", success: true }, { status: 200, headers: { 'ETag': etag } });
     } catch (error) {
         console.log("Error occurred while deleting project:", error.message);
         return NextResponse.json({ message: "Internal server error.", success: false }, { status: 500 });
@@ -214,7 +208,7 @@ export async function GET(req) {
             }
             return NextResponse.json({ project, success: true }, { status: 200, headers: { 'ETag': etag }, });
         } else {
-            return NextResponse.json({ projects: data.projects, success: true }, { status: 200 , headers: { 'ETag': etag }, });
+            return NextResponse.json({ projects: data.projects, success: true }, { status: 200, headers: { 'ETag': etag }, });
         }
     } catch (error) {
         console.log("Error occurred while fetching projects:", error.message);

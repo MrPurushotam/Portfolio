@@ -1,6 +1,5 @@
-import Appbar from "@/components/Appbar";
-import Footer from "@/components/Footer";
 import ResumeIntegration from "@/components/resume"
+import { readData } from "@/utils/common";
 
 export const metadata = {
   title: 'Resume',
@@ -12,20 +11,13 @@ export const metadata = {
     type: 'website'
   }
 };
-export const fetchResumeDocIdServerSide = async () => {
+const fetchResumeDocIdServerSide = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all?choice=resume`, {
-      method: 'GET', next: {
-        revalidate: 8 * 3600,
-        tags: ['resume']  // Tags for selective revalidation
-      }
+    const data = await readData({
+      revalidate: 8 * 3600,
+      tags: ['resume']
     });
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    const data = await res.json();
-    console.log("server side resume page");
-    return data.resumeDocId || "";
+    return data.resumeDocId;
   } catch (error) {
     console.log("Error occurred while fetching.", error.message);
     return "";

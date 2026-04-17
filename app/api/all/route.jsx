@@ -26,6 +26,9 @@ export async function GET(request) {
             if (choice.includes('profile')) {
                 response.profile = data.profile;
             }
+            if (choice.includes('experience')) {
+                response.experience = data.experience;
+            }
         }
         const etag = crypto.createHash('md5').update(JSON.stringify(response)).digest('hex');
 

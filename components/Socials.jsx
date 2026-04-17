@@ -1,61 +1,69 @@
 import Link from 'next/link';
 import React from 'react';
+import LinkedIn from './svgs/LinkedIn';
+import Github from './svgs/Github';
+import Leetcode from './svgs/Leetcode';
+import Mail from './svgs/Mail';
+import X from './svgs/X';
 
 const SocialIcons = () => {
     const arr = [
         {
-            name: 'LinkedIn', href: 'https://www.linkedin.com/in/purushotamjeswani', bgColor: 'bg-blue-700', icon: (
-                <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" />
+            name: 'LinkedIn', href: 'https://www.linkedin.com/in/purushotamjeswani', hoverClass: 'hover:text-[#0077b5]', icon: (
+                <LinkedIn />
             )
         },
         {
-            name: 'GitHub', href: 'https://github.com/MrPurushotam', bgColor: 'bg-black', icon: (
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+            name: 'GitHub', href: 'https://github.com/MrPurushotam', hoverClass: 'hover:text-black dark:hover:text-white', icon: (
+                <Github />
             )
         },
-        // {
-        //     name: 'Twitter', href: 'https://x.com/purushotam___j', bgColor: 'bg-[#1da1f2]', icon: (
-        //         <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
-        //     )
-        // },
         {
-            name: 'LeetCode', href: 'https://leetcode.com/u/MrPurushotam', bgColor: 'bg-[#FFA116]', icon: (
-                <path d="M6.88695652,15.9652174 C5.94782609,15.9652174 5.04347826,15.6173913 4.3826087,14.9565217 L1.39130435,12 C1.28695652,11.8956522 1.1826087,11.7913043 1.11304348,11.6869565 C0.417391304,10.8173913 0.139130435,9.70434783 0.382608696,8.66086957 C0.452173913,8.4173913 0.52173913,8.20869565 0.626086957,8 L0.660869565,7.89565217 L0.695652174,7.82608696 L0.730434783,7.75652174 C0.8,7.65217391 0.869565217,7.51304348 0.973913043,7.40869565 C1.04347826,7.33913043 1.11304348,7.23478261 1.1826087,7.16521739 L7.6173913,0.243478261 C7.72173913,0.139130435 7.86086957,0.0695652174 8.03478261,0.0695652174 C8.17391304,0.0695652174 8.31304348,0.139130435 8.4173913,0.208695652 C8.66086957,0.417391304 8.66086957,0.8 8.45217391,1.00869565 L6.53913043,3.06086957 L7.26956522,3.16521739 C7.93043478,3.26956522 8.52173913,3.51304348 9.00869565,3.93043478 L11.4434783,5.91304348 C11.6869565,6.12173913 11.7217391,6.46956522 11.5130435,6.71304348 C11.4086957,6.85217391 11.2347826,6.92173913 11.0608696,6.92173913 C10.9217391,6.92173913 10.8173913,6.88695652 10.7130435,6.7826087 L8.27826087,4.8 C7.82608696,4.45217391 7.23478261,4.24347826 6.60869565,4.24347826 C5.84347826,4.24347826 5.11304348,4.52173913 4.66086957,5.00869565 L1.9826087,7.86086957 C1.42608696,8.48695652 1.25217391,9.35652174 1.56521739,10.1913043 L1.6,10.2956522 C1.73913043,10.6086957 1.94782609,10.9217391 2.19130435,11.1652174 C2.19130435,11.1652174 5.14782609,14.0521739 5.1826087,14.0869565 C5.63478261,14.5391304 6.26086957,14.7826087 6.92173913,14.7826087 C7.5826087,14.7826087 8.20869565,14.5391304 8.66086957,14.0521739 L10.3304348,12.3826087 C10.4347826,12.2782609 10.573913,12.2086957 10.7478261,12.2086957 C10.8869565,12.2086957 11.026087,12.2782609 11.1652174,12.3826087 C11.373913,12.5913043 11.373913,12.973913 11.1652174,13.1826087 L9.49565217,14.8521739 C8.76521739,15.5826087 7.86086957,15.9652174 6.88695652,15.9652174 Z M5.9826087,10.0869565 C5.66956522,10.0869565 5.42608696,9.84347826 5.42608696,9.53043478 C5.42608696,9.2173913 5.66956522,8.97391304 5.9826087,8.97391304 L13.0434783,8.97391304 C13.3565217,8.97391304 13.6,9.2173913 13.6,9.53043478 C13.6,9.84347826 13.3913043,10.0869565 13.0782609,10.0869565 L5.9826087,10.0869565 Z" id="Shape"></path>)
+            name: 'X', href: 'https://x.com/purushotam___j', hoverClass: 'hover:text-black dark:hover:text-white', icon: (
+                <X />
+            )
         },
-        // {
-        //     name: "Mail", href: "mailto:work.purushotam@gmail.com",bgColor: "bg-[#f95451]",icon: (
-        //         <path d="M0 4a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H2a2 2 0 01-2-2V4zm2-.5v.511l6 3.6 6-3.6V3.5H2zm12 2.303l-5.72 3.433a.5.5 0 01-.56 0L2 6.803V12h12V6.803z" />
-        //     )
-        // }
+        {
+            name: 'LeetCode', href: 'https://leetcode.com/u/MrPurushotam', hoverClass: 'hover:text-[#FFA116]', icon: (
+                <Leetcode />
+            )
+        },
+        {
+            name: "Mail", href: "mailto:work.purushotam@gmail.com", hoverClass: "hover:text-[#ea4335]", icon: (
+                <Mail />
+            )
+        }
     ]
     return (
-        <ul className="flex justify-center items-center">
+        <ul className="flex justify-center items-center gap-4">
             {arr.map((social, index) => (
-                <li key={index} className="relative mx-2 group">
+                <li key={index} className="relative group">
                     <Link
                         target='_blank'
-                        href={social.href}
+                        rel='noopener noreferrer'
                         aria-label={social.name}
-                        className={`relative flex justify-center items-center w-12 h-12 rounded-full bg-white text-gray-600 transition-all ease-in-out duration-300 hover:shadow-lg hover:text-white overflow-hidden`}
+                        href={social.href}
+                        className={`flex justify-center items-center w-12 h-12 rounded-full bg-white dark:bg-zinc-800/80 text-gray-500 dark:text-gray-400 border border-black/5 dark:border-white/10 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-md ${social.hoverClass}`}
                     >
-                        <div className={`absolute inset-0 ${social.bgColor} transition-all ease-in-out duration-300 opacity-0 group-hover:opacity-100`}></div>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="30"
-                            height="30"
+                            width="22"
+                            height="22"
                             fill="currentColor"
-                            className="relative z-10"
+                            className="transition-colors duration-300"
                             viewBox="0 0 16 16"
                         >
                             {social.icon}
                         </svg>
                     </Link>
-                    <div className="absolute top-[60px] left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 rounded opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible">
+                    <div className="absolute top-[54px] left-1/2 transform -translate-x-1/2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-medium px-2.5 py-1 rounded-md opacity-0 invisible transition-all duration-300 translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none whitespace-nowrap z-50">
                         {social.name}
+                        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-white rotate-45 -z-10"></div>
                     </div>
                 </li>
-            ))}
-        </ul>
+            ))
+            }
+        </ul >
     );
 };
 

@@ -1,6 +1,6 @@
 import { Body } from "@/components/Body";
-import { revalidatePath } from 'next/cache';
-
+import { readData } from "@/utils/common";
+import { fetchGitHubContributions } from "@/lib/githubContributions";
 
 export const metadata = {
   title: 'Home | Purushotam Jeswani',
@@ -13,25 +13,28 @@ export const metadata = {
   }
 };
 
-export const fetchStaticDataServerSide = async () => {
+const fetchStaticDataServerSide = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all`, {
-      next: {
-        revalidate: 8 * 3600,
-        tags: ['projects', 'skills', 'profile', 'resume']
-      }
-    }
-    );
-    if (!res.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    const data = await res.json();
+    const [data, githubHeatmapData] = await Promise.all([
+      readData({
+        revalidate: 24 * 3600,
+        tags: ['projects', 'skills', 'profile', 'resume', 'githubHeatmapTheme', 'experience']
+      }),
+      fetchGitHubContributions().catch(err => {
+        console.error('Error fetching GitHub data:', err);
+        return null;
+      })
+    ]);
+
     return {
       props: {
         projects: data.projects || [],
         skills: data.skills || [],
         profile: data.profile || {},
         resumeDocId: data.resumeDocId || '',
+        githubHeatmapTheme: data.githubHeatmapTheme || 'ocean',
+        githubHeatmapData,
+        experience: data.experience || [],
       },
     };
   } catch (error) {
@@ -42,6 +45,9 @@ export const fetchStaticDataServerSide = async () => {
         skills: [],
         profile: {},
         resumeDocId: '',
+        githubHeatmapTheme: 'ocean',
+        githubHeatmapData: null,
+        experience: [],
       },
     };
   }
@@ -55,8 +61,8 @@ export const fetchStaticDataServerSide = async () => {
 
 export default async function Home() {
   const data = await fetchStaticDataServerSide();
-  const { projects, skills, profile, resumeDocId } = data.props;
+  const { projects, skills, profile, resumeDocId, githubHeatmapTheme, githubHeatmapData, experience } = data.props;
   return (
-    <Body key={1212} projects={projects} skills={skills} profile={profile} resumeDocId={resumeDocId} />
+    <Body projects={projects} skills={skills} profile={profile} resumeDocId={resumeDocId} githubHeatmapTheme={githubHeatmapTheme} githubHeatmapData={githubHeatmapData} experience={experience} />
   );
 }

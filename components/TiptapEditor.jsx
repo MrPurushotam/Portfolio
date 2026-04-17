@@ -1,4 +1,3 @@
-// Tiptap Editor With Font Size and Font Family Support
 'use client'
 
 import { EditorContent, useEditor } from '@tiptap/react'

@@ -55,7 +55,7 @@ const ThemeSelectAppbar = () => {
             >
 
                 <SunIcon className={`text-yellow-400 transition-all duration-300 ${theme === 'dark' ? 'rotate-0 scale-100' : 'rotate-90 scale-0'}`} />
-                <MoonIcon className={`absolute text-neutral-700 transition-all duration-300 ${theme === 'light' ? 'rotate-0 scale-100' : 'rotate-90 scale-0'}`}/>
+                <MoonIcon className={`absolute text-neutral-700 transition-all duration-300 ${theme === 'light' ? 'rotate-0 scale-100' : 'rotate-90 scale-0'}`} />
             </button>
         </div>
     )

@@ -1,9 +1,11 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
-import UpdateProjects from "./UpdateProjects";
-import UpdateSkill from "./UpdateSkill";
+import UpdateProjects from ".././UpdateProjects";
+import UpdateSkill from ".././UpdateSkill";
+import UpdateExperience from ".././UpdateExperience";
+import { GithubHeatmapSelector } from "./GithubHeatmapSelector";
 import { useRouter } from "next/navigation";
-import useCurrentTime from "./currentTime";
+import useCurrentTime from ".././currentTime";
 import { ReactSortable } from "react-sortablejs";
 import { ArrowCounterClockwiseIcon, NotePencilIcon, PencilSimple, PencilSimpleIcon, TrashSimpleIcon } from "@phosphor-icons/react";
 const Admin = () => {
@@ -12,7 +14,9 @@ const Admin = () => {
     const [editData, setEditData] = useState("");
     const [projects, setProjects] = useState([]);
     const [skills, setSkills] = useState([]);
+    const [experience, setExperience] = useState([]);
     const [resumeDocId, setResumeDocId] = useState("");
+    const [githubTheme, setGithubTheme] = useState("");
     const [profile, setProfile] = useState([]);
     const profileUrlRef = useRef("");
     const initalData = useRef({});
@@ -20,6 +24,7 @@ const Admin = () => {
     const router = useRouter();
     const [projectsOrder, setProjectsOrder] = useState([]);
     const [skillsOrder, setSkillsOrder] = useState([]);
+    const [experienceOrder, setExperienceOrder] = useState([]);
 
 
     useEffect(() => {
@@ -40,8 +45,10 @@ const Admin = () => {
                         initalData.current = data;
                         setProjects(data.projects);
                         setSkills(data.skills);
+                        setExperience(data.experience || []);
                         setResumeDocId(data.resumeDocId);
                         setProfileUrl(data.profile);
+                        setGithubTheme(data.githubHeatmapTheme || "ocean");
                     }
                 }
             } catch (error) {
@@ -100,6 +107,11 @@ const Admin = () => {
             if (type === "skill") {
                 setSkills(prev => {
                     return prev.filter(skill => skill.id !== id)
+                })
+            }
+            if (type === "experience") {
+                setExperience(prev => {
+                    return prev.filter(exp => exp.id !== id)
                 })
             }
         }
@@ -176,10 +188,11 @@ const Admin = () => {
     useEffect(() => {
         setProjectsOrder(projects.map((project) => project.id));
         setSkillsOrder(skills.map((skill) => skill.id));
-    }, [projects, skills]);
+        setExperienceOrder(experience.map((exp) => exp.id));
+    }, [projects, skills, experience]);
 
     const updateOrder = async (type) => {
-        const currentOrder = type === "projects" ? projectsOrder : skillsOrder;
+        const currentOrder = type === "projects" ? projectsOrder : (type === "skills" ? skillsOrder : experienceOrder);
         const initialOrder = initalData.current[type]?.map((item) => item.id) || [];
 
         if (JSON.stringify(currentOrder) === JSON.stringify(initialOrder)) {
@@ -204,7 +217,8 @@ const Admin = () => {
     return (
         <div className="w-full min-h-screen py-5 px-2 bg-white">
             {(edit === "projects" || editData?.type === "projects") && <UpdateProjects setProjects={setProjects} close={editData?.type === "projects" ? setEditData : setEdit} updating={editData?.id || null} />}
-            {(edit === "skills" || editData?.type === "skills") && <UpdateSkill setSkills={setSkills} close={editData?.type === "skills" ? setEditData : setEdit} updating={editData?.id || null} />}
+            {(edit === "skill" || editData?.type === "skill") && <UpdateSkill setSkills={setSkills} close={editData?.type === "skill" ? setEditData : setEdit} updating={editData?.id || null} />}
+            {(edit === "experience" || editData?.type === "experience") && <UpdateExperience setExperience={setExperience} close={editData?.type === "experience" ? setEditData : setEdit} updating={editData?.id || null} />}
             <div className="flex flex-col justify-center w-[80%] py-3 px-8 border-2 border-black mx-auto space-y-4 rounded-md">
                 <div className="flex justify-between pt-7">
                     <h3 className="text-sm text-gray-900 font-semibold tracking-wider">{time}</h3>
@@ -258,7 +272,7 @@ const Admin = () => {
                     <div className="flex items-center justify-between ">
                         <h2 className="text-xl font-semibold tracking-wider">Skills</h2>
                         <div className="flex gap-2 items-center p-1">
-                            <ArrowCounterClockwiseIcon size={18} className="text-2xl hover:text-sky-600 rounded-md" onClick={() => revalidate("skills")} />
+                            <ArrowCounterClockwiseIcon size={18} className="text-2xl hover:text-sky-600 rounded-md" onClick={() => revalidate("skill")} />
 
                             <PencilSimpleIcon size={18} className="text-2xl hover:text-sky-600" onClick={() => setEdit("skills")} />
 
@@ -279,9 +293,9 @@ const Admin = () => {
                                 <div key={skill.id} className="flex justify-center items-center flex-col w-32 h-32 rounded-md shadow-sm border-2 border-amber-900 capitalize">
                                     {skill.name}
                                     <div className="flex space-x-1 py-1">
-                                        <NotePencilIcon size={18} className="text-xl font-semibold hover:text-green-600 z-1" title="Edit Projects" onClick={() => handleEdit("skills", skill.id)} />
+                                        <NotePencilIcon size={18} className="text-xl font-semibold hover:text-green-600 z-1" title="Edit Projects" onClick={() => handleEdit("skill", skill.id)} />
 
-                                        <TrashSimpleIcon size={18} className="text-xl font-semibold hover:text-red-600 z-1" title="Delete Project" onClick={() => handleDelete("skills", skill.id)} />
+                                        <TrashSimpleIcon size={18} className="text-xl font-semibold hover:text-red-600 z-1" title="Delete Project" onClick={() => handleDelete("skill", skill.id)} />
                                     </div>
                                 </div>
                             )
@@ -291,6 +305,46 @@ const Admin = () => {
                     <button
                         className="bg-blue-500 text-white font-semibold text-xl px-3 py-2 mt-3 rounded-md shadow-md hover:bg-blue-700"
                         onClick={() => updateOrder("skills")}
+                    >
+                        Update Order
+                    </button>
+                </div>
+
+                <div className="w-11/12 mx-auto p-1 flex flex-col space-y-3">
+                    <div className="flex items-center justify-between ">
+                        <h2 className="text-xl font-semibold tracking-wider">Experience</h2>
+                        <div className="flex gap-2 items-center p-1">
+                            <ArrowCounterClockwiseIcon size={18} className="text-2xl hover:text-sky-600 rounded-md" onClick={() => revalidate("experience")} />
+                            <PencilSimpleIcon size={18} className="text-2xl hover:text-sky-600" onClick={() => setEdit("experience")} />
+                        </div>
+                    </div>
+                    <ReactSortable
+                        list={experience}
+                        setList={setExperience}
+                        animation={150}
+                        className="w-full min-h-36 h-fit border-2 border-amber-600 overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 p-1"
+                        onEnd={(evt) => {
+                            const newOrder = evt.to.children;
+                            setExperienceOrder(Array.from(newOrder).map(node => parseInt(node.getAttribute('data-id'))));
+                        }}
+                    >
+                        {experience.map((exp) => {
+                            return (
+                                <div key={exp.id} data-id={exp.id} className="flex justify-center items-center flex-col w-32 h-32 rounded-md shadow-sm border-2 border-amber-900 capitalize relative p-2 text-center text-sm">
+                                    <span className="font-semibold">{exp.role}</span>
+                                    <span className="text-xs text-gray-500">{exp.company}</span>
+                                    <div className="flex space-x-1 py-1 absolute bottom-1 right-1">
+                                        <NotePencilIcon size={18} className="text-xl font-semibold hover:text-green-600 z-1" title="Edit Experience" onClick={() => handleEdit("experience", exp.id)} />
+                                        <TrashSimpleIcon size={18} className="text-xl font-semibold hover:text-red-600 z-1" title="Delete Experience" onClick={() => handleDelete("experience", exp.id)} />
+                                    </div>
+                                </div>
+                            )
+                        })
+                        }
+                    </ReactSortable>
+                    <button
+                        className="bg-blue-500 text-white font-semibold text-xl px-3 py-2 mt-3 rounded-md shadow-md hover:bg-blue-700"
+                        onClick={() => updateOrder("experience")}
                     >
                         Update Order
                     </button>
@@ -335,6 +389,8 @@ const Admin = () => {
 
                     </div>
                 </div>
+
+                <GithubHeatmapSelector currentTheme={githubTheme} revalidate={revalidate} />
             </div>
         </div>
     )
