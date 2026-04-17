@@ -17,7 +17,7 @@ export async function POST(req) {
         let resourceType;
 
         if (!role || !company || !duration || !description) {
-            return NextResponse.json({ message: "Please fill all the necessary fields.", success: false }, { status: 401 });
+            return NextResponse.json({ message: "Please fill all the necessary fields.", success: false }, { status: 400 });
         }
 
         let uploadedFileUrl;
@@ -101,14 +101,14 @@ export async function PUT(req) {
         let resourceType;
 
         if (!id) {
-            return NextResponse.json({ message: "Id can't be null.", success: false }, { status: 401 });
+            return NextResponse.json({ message: "Id can't be null.", success: false }, { status: 400 });
         }
 
         const data = await readData();
         const experienceIndex = data.experience.findIndex(exp => exp.id === id);
 
         if (experienceIndex === -1) {
-            return NextResponse.json({ message: "Invalid experience id.", success: false }, { status: 403 });
+            return NextResponse.json({ message: "Invalid experience id.", success: false }, { status: 404 });
         }
         const experience = data.experience[experienceIndex];
         let newMediaUrl = experience.static_file;
@@ -145,7 +145,10 @@ export async function PUT(req) {
 
                 if (experience.static_file && experience.static_file.includes("experience_static_media")) {
                     const publicId = experience.static_file.split('/').pop().split('.')[0];
-                    await cloudinary.v2.uploader.destroy(`experience_static_media/${publicId}`).catch(e => console.log(e));
+                    await cloudinary.v2.uploader.destroy(
+                        `experience_static_media/${publicId}`,
+                        { resource_type: experience.resourceType || 'image' }
+                    ).catch(e => console.log(e));
                 }
 
                 const result = await new Promise((resolve, reject) => {
@@ -201,7 +204,7 @@ export async function DELETE(req) {
         const { id } = body;
 
         if (!id) {
-            return NextResponse.json({ message: "Id can't be null.", success: false }, { status: 401 });
+            return NextResponse.json({ message: "Id can't be null.", success: false }, { status: 400 });
         }
 
         const data = await readData();
@@ -215,10 +218,12 @@ export async function DELETE(req) {
         if (experience.static_file) {
             const publicId = experience.static_file.split('/').pop().split('.')[0];
             try {
-                await cloudinary.v2.uploader.destroy(`experience_static_media/${publicId}`);
+                await cloudinary.v2.uploader.destroy(
+                    `experience_static_media/${publicId}`,
+                    { resource_type: experience.resourceType || 'image' }
+                );
             } catch (cloudinaryError) {
                 console.error("Cloudinary deletion error:", cloudinaryError.message);
-                return NextResponse.json({ message: "Failed to delete associated media file.", success: false }, { status: 500 });
             }
         }
         data.experience.splice(experienceIndex, 1);
@@ -245,13 +250,13 @@ export async function GET(req) {
             if (!experience) {
                 return NextResponse.json({ message: "Experience not found", success: false }, { status: 404 });
             }
-            
+
             const etag = crypto.createHash('md5').update(JSON.stringify(experience)).digest('hex');
             const clientEtag = req.headers.get('If-None-Match');
             if (clientEtag === etag) {
                 return new Response(null, { status: 304 });
             }
-            
+
             return NextResponse.json({ experience, success: true }, { status: 200, headers: { 'ETag': etag }, });
         } else {
             const etag = crypto.createHash('md5').update(JSON.stringify(data)).digest('hex');
@@ -259,7 +264,7 @@ export async function GET(req) {
             if (clientEtag === etag) {
                 return new Response(null, { status: 304 });
             }
-            
+
             return NextResponse.json({ experience: data.experience, success: true }, { status: 200, headers: { 'ETag': etag }, });
         }
     } catch (error) {

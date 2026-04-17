@@ -56,7 +56,7 @@ export async function POST(req) {
         const body = await req.json();
         const { docId } = body;
         if (!docId) {
-            return NextResponse.json({ message: "DocId is important.", success: false }, { status: 401 });
+            return NextResponse.json({ message: "DocId is important.", success: false }, { status: 400 });
         }
         const data = await readData();
         data.resumeDocId = docId;
